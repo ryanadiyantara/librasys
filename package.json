@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "engines": {
-    "node": "20.17.0"
+    "node": "25.2.1"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon backend/server.js",
@@ -17,6 +17,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@chakra-ui/theme-tools": "^2.2.6",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cross-env": "^10.1.0",

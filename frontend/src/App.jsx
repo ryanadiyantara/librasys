@@ -1,0 +1,40 @@
+import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Navigate, Route, Routes } from "react-router-dom";
+
+import Login from "./pages/login";
+import ForgotPassword from "./pages/forgotpassword";
+import Dashboard from "./pages/dashboard";
+import Loan from "./pages/loan";
+import Profile from "./pages/profile";
+import ChangePassword from "./pages/changepassword";
+import AdminDashboard from "./pages/admin.dashboard";
+import AdminUser from "./pages/admin.user";
+import AdminBook from "./pages/admin.book";
+import AdminLoan from "./pages/admin.loan";
+
+function App() {
+  return (
+    <>
+      <Box minH={"100vh"} bg={useColorModeValue("gray.100", "gray.900")}>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/login/forgotpassword" element={<ForgotPassword />} />
+
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/loan" element={<Loan />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/changepassword" element={<ChangePassword />} />
+
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/user" element={<AdminUser />} />
+          <Route path="/admin/book" element={<AdminBook />} />
+          <Route path="/admin/loan" element={<AdminLoan />} />
+        </Routes>
+      </Box>
+    </>
+  );
+}
+
+export default App;
