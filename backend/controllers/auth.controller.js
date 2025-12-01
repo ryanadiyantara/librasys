@@ -54,6 +54,7 @@ export const login = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     accessToken: accessToken,
+    role: foundUser.role,
   });
 });
 
@@ -156,10 +157,10 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     html: `<p>Hello,</p>
     <p>We received a request to reset your password. Please click the link below to reset your password:</p>
     <a href="${resetURL}">Reset Password</a>
-    <p>If you click the reset link, your password will be reset to: chakra1234</p>
+    <p>If you click the reset link, your password will be reset to: librasys123</p>
     <p>If you did not request a password reset, please ignore this email and do not click the reset password link.</p>
     <p>Thank you,</p>
-    <p>Chakra Cosmetics.</p>`,
+    <p>librasys</p>`,
   };
 
   try {
@@ -210,7 +211,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
   }
 
   // Hash the new password
-  const hashedPwd = await bcrypt.hash("chakra1234", 10);
+  const hashedPwd = await bcrypt.hash("librasys123", 10);
 
   // Update the user's password and clear the reset token and expiration
   user.password = hashedPwd;
