@@ -77,31 +77,6 @@ export const getBooks = async (req, res) => {
   }
 };
 
-// Controller to get the current book by ID
-export const getCurrentBooks = async (req, res) => {
-  const { id } = req.params;
-
-  // Validate the book ID
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ success: false, message: "Invalid Book ID" });
-  }
-
-  try {
-    // Fetch the book by ID
-    const book = await Book.findById(id);
-
-    // Check if book exists
-    if (!book) {
-      return res.status(404).json({ success: false, message: "Book not found" });
-    }
-
-    res.status(200).json({ success: true, data: book });
-  } catch (error) {
-    console.log("Error in Fetching books:", error.message);
-    res.status(404).json({ success: false, message: "Server Error" });
-  }
-};
-
 // Controller to update a book by ID
 export const updateBooks = async (req, res) => {
   upload(req, res, async (err) => {

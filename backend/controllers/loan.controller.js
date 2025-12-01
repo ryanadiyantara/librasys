@@ -35,31 +35,6 @@ export const getLoans = async (req, res) => {
   }
 };
 
-// Controller to get the current loan by ID
-export const getCurrentLoans = async (req, res) => {
-  const { id } = req.params;
-
-  // Validate the loan ID
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ success: false, message: "Invalid Loan ID" });
-  }
-
-  try {
-    // Fetch the loan by ID
-    const loan = await Loan.findById(id);
-
-    // Check if loan exists
-    if (!loan) {
-      return res.status(404).json({ success: false, message: "Loan not found" });
-    }
-
-    res.status(200).json({ success: true, data: loan });
-  } catch (error) {
-    console.log("Error in Fetching loans:", error.message);
-    res.status(404).json({ success: false, message: "Server Error" });
-  }
-};
-
 // Controller to update a loan by ID
 export const updateLoans = async (req, res) => {
   const { id } = req.params;

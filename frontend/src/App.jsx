@@ -25,7 +25,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/loan" element={<Loan />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/changepassword" element={<ChangePassword />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
 
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/user" element={<AdminUser />} />
