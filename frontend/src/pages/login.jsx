@@ -94,7 +94,7 @@ const Login = () => {
         password: "",
       });
       setTimeout(() => {
-        if (role === "admin") {
+        if (role === "Admin") {
           navigate("/admin/dashboard");
         } else {
           navigate("/dashboard");

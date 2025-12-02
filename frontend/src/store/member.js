@@ -33,19 +33,13 @@ export const useMemberStore = create((set) => ({
       return { success: false, message: "Please fill in all fields." };
     }
 
-    const formData = new FormData();
-    formData.append("role", newMember.role);
-    formData.append("name", newMember.name);
-    formData.append("email", newMember.email);
-    formData.append("identityNumber", newMember.identityNumber);
-    formData.append("file", newMember.profileImage);
-
     const res = await fetch("/api/members", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: formData,
+      body: JSON.stringify(newMember),
     });
 
     if (res.status === 401 || res.status === 403) {
@@ -110,11 +104,11 @@ export const useMemberStore = create((set) => ({
     }
 
     const formData = new FormData();
-    formData.append("role", newMember.role);
-    formData.append("name", newMember.name);
-    formData.append("email", newMember.email);
-    formData.append("identityNumber", newMember.identityNumber);
-    formData.append("file", newMember.profileImage);
+    formData.append("role", updatedMember.role);
+    formData.append("name", updatedMember.name);
+    formData.append("email", updatedMember.email);
+    formData.append("identityNumber", updatedMember.identityNumber);
+    formData.append("file", updatedMember.profileImage);
 
     const res = await fetch(`/api/members/${pid}`, {
       method: "PUT",

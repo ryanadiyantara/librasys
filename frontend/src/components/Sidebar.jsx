@@ -19,7 +19,7 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import { DocumentIcon, HomeIcon, PersonIcon } from "./Icons/Icons";
+import { DocumentIcon, HomeIcon, PersonIcon, RocketIcon } from "./Icons/Icons";
 import IconBox from "./Icons/IconBox";
 import { HSeparator } from "./Separator";
 
@@ -73,7 +73,7 @@ function Sidebar() {
         route.views.some((view) => view.path === location.pathname)
       );
 
-      if (activeRoute && activeRoute.name == "admin" && currentMembers?.role !== activeRoute.name) {
+      if (activeRoute && activeRoute.name == "Admin" && currentMembers?.role !== activeRoute.name) {
         navigate("/dashboard");
         toast({
           title: "Error",

@@ -1,46 +1,211 @@
 import { useEffect, useState } from "react";
 import {
   Box,
+  Button,
   Flex,
+  FormControl,
+  FormLabel,
   HStack,
+  Input,
   Table,
   Tbody,
   Text,
   Th,
   Thead,
   Tr,
+  useToast,
   useColorModeValue,
   VStack,
   Td,
   Image,
-  Input,
+  Select,
 } from "@chakra-ui/react";
+import { FaPen, FaTrash } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
 import { useMemberStore } from "../store/member";
 
 const AdminMember = () => {
   // Utils
-  const { members, fetchMember } = useMemberStore();
+  const { members, createMember, fetchMember, updateMember, deleteMember } = useMemberStore();
 
+  const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
+  const iconColor = useColorModeValue("black", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
   const hoverColor = useColorModeValue("gray.100", "gray.700");
   const [searchQuery, setSearchQuery] = useState("");
+  const [newMember, setNewMember] = useState({
+    role: "",
+    name: "",
+    email: "",
+    identityNumber: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingMemberId, setEditingMemberId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedMemberName, setSelectedMemberName] = useState(null);
+  const [selectedMemberPid, setSelectedMemberPid] = useState(null);
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value.toLowerCase());
+  const handleSearchChange = (member) => {
+    setSearchQuery(member.target.value.toLowerCase());
+  };
+
+  const handleEditClick = (member) => {
+    setNewMember({
+      role: member.role,
+      name: member.name,
+      email: member.email,
+      identityNumber: member.identityNumber,
+    });
+    setErrors({});
+    setIsEditing(true);
+    setEditingMemberId(member._id);
+  };
+
+  const handleCancelEdit = () => {
+    setNewMember({
+      role: "",
+      name: "",
+      email: "",
+      identityNumber: "",
+    });
+    setErrors({});
+    setIsEditing(false);
+    setEditingMemberId(null);
+  };
+
+  const openDeleteModal = (name, pid) => {
+    setSelectedMemberName(name);
+    setSelectedMemberPid(pid);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setInputValue("");
+    setSelectedMemberName(null);
+    setSelectedMemberPid(null);
   };
 
   // Services
   useEffect(() => {
     fetchMember();
   }, [fetchMember]);
+
+  const handleSubmit = async () => {
+    const currentErrors = {
+      role: !newMember.role,
+      name: !newMember.name,
+      email: !newMember.email,
+      identityNumber: !newMember.identityNumber,
+    };
+
+    setErrors(currentErrors);
+
+    if (isEditing && editingMemberId) {
+      // Update member
+      const { success, message } = await updateMember(editingMemberId, newMember);
+
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Member updated successfully",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setIsEditing(false);
+        setEditingMemberId(null);
+        setNewMember({
+          role: "",
+          name: "",
+          email: "",
+          identityNumber: "",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          isClosable: true,
+        });
+      }
+    } else {
+      // Create new member
+      const { success, message } = await createMember(newMember);
+
+      if (success) {
+        toast({
+          title: "Success",
+          description: message,
+          status: "success",
+          isClosable: true,
+        });
+        setNewMember({
+          role: "",
+          name: "",
+          email: "",
+          identityNumber: "",
+        });
+        document.querySelector('input[type="file"]').value = "";
+      } else {
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          isClosable: true,
+        });
+      }
+    }
+  };
+
+  const handleDeleteMember = async (pid) => {
+    if (!selectedMemberName) return;
+
+    if (inputValue !== selectedMemberName) {
+      toast({
+        title: "Error",
+        description: "Input does not match the member name.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const { success, message } = await deleteMember(pid);
+
+    if (success) {
+      toast({
+        title: "Success",
+        description: "Member deleted successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setIsOpen(false);
+      setInputValue("");
+      setSelectedMemberName(null);
+      setSelectedMemberPid(null);
+    } else {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <>
@@ -74,7 +239,7 @@ const AdminMember = () => {
         >
           {/* Table Data */}
           <VStack
-            spacing={2}
+            spacing={1}
             alignItems={"left"}
             w="100%"
             p="20px"
@@ -116,6 +281,9 @@ const AdminMember = () => {
                     </Th>
                     <Th borderColor={borderColor} color="gray.400">
                       Registered Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Action
                     </Th>
                   </Tr>
                 </Thead>
@@ -201,12 +369,155 @@ const AdminMember = () => {
                               })}
                             </Text>
                           </Td>
+                          <Td borderColor={borderColor}>
+                            <Flex direction="row" p="0px" alignItems="center" gap="4">
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => handleEditClick(member)}
+                              >
+                                <FaPen size="14" color={iconColor} />
+                                <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                  EDIT
+                                </Text>
+                              </Flex>
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => openDeleteModal(member.name, member._id)}
+                              >
+                                <FaTrash size="14" color="#E53E3E" />
+                                <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
+                                  DELETE
+                                </Text>
+                              </Flex>
+                              {/* Modal Delete */}
+                              <CustomModal
+                                isOpen={isOpen}
+                                onClose={handleClose}
+                                title="Delete Member"
+                                bodyContent={
+                                  <p>
+                                    To delete a member named{" "}
+                                    <span style={{ fontWeight: "bold" }}>{selectedMemberName}</span>
+                                    , type the name to confirm.
+                                  </p>
+                                }
+                                modalBgColor="blackAlpha.400"
+                                modalBackdropFilter="blur(1px)"
+                                inputValue={inputValue}
+                                onInputChange={(e) => setInputValue(e.target.value)}
+                                onConfirm={() => handleDeleteMember(selectedMemberPid)}
+                              />
+                            </Flex>
+                          </Td>
                         </Tr>
                       );
                     })}
                 </Tbody>
               </Table>
             </Box>
+          </VStack>
+
+          {/* Input Form */}
+          <VStack>
+            <Flex direction="column" w="325px" borderRadius="15px" p="40px" bg={bgForm} mb="60px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
+                {isEditing ? "Edit Member" : "Add New Member"}
+              </Text>
+              <FormControl>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Role
+                </FormLabel>
+                <Select
+                  fontSize="sm"
+                  ms="4px"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Select Role"
+                  name="role"
+                  value={newMember.role}
+                  onChange={(e) => setNewMember({ ...newMember, role: e.target.value })}
+                  borderColor={errors.role ? "red.500" : "gray.200"}
+                >
+                  <option value="Member">Member</option>
+                  <option value="Admin">Admin</option>
+                </Select>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Member Name
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="text"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Member Name"
+                  name="name"
+                  value={newMember.name}
+                  onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
+                  borderColor={errors.name ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Email
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="email"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Email"
+                  name="email"
+                  value={newMember.email}
+                  onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
+                  borderColor={errors.email ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Identity Number
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="text"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Identity Number"
+                  name="identityNumber"
+                  value={newMember.identityNumber}
+                  onChange={(e) => setNewMember({ ...newMember, identityNumber: e.target.value })}
+                  borderColor={errors.identityNumber ? "red.500" : "gray.200"}
+                />
+                <Button
+                  bg="blue.400"
+                  fontSize="14px"
+                  color="white"
+                  fontWeight="bold"
+                  w="100%"
+                  h="45"
+                  mt="24px"
+                  onClick={handleSubmit}
+                >
+                  {isEditing ? "Update" : "Submit"}
+                </Button>
+                {isEditing && (
+                  <Button
+                    fontSize="14px"
+                    variant="solid"
+                    fontWeight="bold"
+                    w="100%"
+                    h="45"
+                    mt="4"
+                    onClick={handleCancelEdit}
+                    colorScheme="gray"
+                  >
+                    Cancel
+                  </Button>
+                )}
+              </FormControl>
+            </Flex>
           </VStack>
         </HStack>
 

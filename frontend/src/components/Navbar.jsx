@@ -27,7 +27,7 @@ import { useMemberStore } from "../store/member";
 
 function Navbar() {
   // Utils
-  const { currentMembers, fetchCurrentMember, logout } = useMemberStore();
+  const { currentMembers, fetchCurrentMember, logoutMember } = useMemberStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const routes = [
@@ -46,7 +46,7 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMemberLoaded, setIsMemberLoaded] = useState(false);
-  const [isMemberSession, setIsMemberSession] = useState(false);
+  const [isAdminSession, setIsAdminSession] = useState(false);
   const activeRoute = routes.find((route) => route.path === location.pathname);
   const { colorMode, toggleColorMode } = useColorMode();
   const handleOpenDrawer = () => setIsOpen(true);
@@ -64,16 +64,16 @@ function Navbar() {
 
   useEffect(() => {
     if (isMemberLoaded && currentMembers) {
-      if (currentMembers?.role === "admin") {
-        setIsMemberSession(true);
+      if (currentMembers?.role === "Admin") {
+        setIsAdminSession(true);
       } else {
-        setIsMemberSession(false);
+        setIsAdminSession(false);
       }
     }
   }, [isMemberLoaded, currentMembers]);
 
   const handleLogout = async () => {
-    const { success, message } = await logout();
+    const { success, message } = await logoutMember();
 
     if (success) {
       toast({
@@ -82,7 +82,7 @@ function Navbar() {
         status: "success",
         isClosable: true,
       });
-      navigate("/signin");
+      navigate("/login");
     } else {
       toast({
         title: "Error",
@@ -140,13 +140,13 @@ function Navbar() {
           <Breadcrumb>
             <BreadcrumbItem color={"white"}>
               <BreadcrumbLink
-                href={isMemberSession ? "/admin/dashboard" : "/dashboard"}
+                href={isAdminSession ? "/admin/dashboard" : "/dashboard"}
                 color={"white"}
               >
                 Pages
               </BreadcrumbLink>
             </BreadcrumbItem>
-            {isMemberSession && (
+            {isAdminSession && (
               <BreadcrumbItem color={"white"}>
                 <BreadcrumbLink href="/admin/dashboard" color={"white"}>
                   Admin
@@ -191,7 +191,7 @@ function Navbar() {
           flexDirection="row"
           justifyContent="flex-end"
         >
-          {isMemberSession && <SidebarResponsive />}
+          {isAdminSession && <SidebarResponsive />}
           <SettingsIcon
             cursor="pointer"
             color={"white"}
