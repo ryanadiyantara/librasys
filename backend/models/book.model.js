@@ -9,12 +9,12 @@ const booksSchema = new mongoose.Schema(
     author: {
       type: String,
       required: false,
-      default: "-",
+      default: "Unknown",
     },
     publisher: {
       type: String,
       required: false,
-      default: "-",
+      default: "Unknown",
     },
     year: {
       type: String,
@@ -29,7 +29,7 @@ const booksSchema = new mongoose.Schema(
     category: {
       type: String,
       required: false,
-      default: "-",
+      default: "Uncategorized",
     },
     stock: {
       type: Number,

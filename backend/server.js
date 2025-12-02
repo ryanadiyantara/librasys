@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import { connectDB } from "./config/db.js";
 
 import authRoutes from "./routes/auth.route.js";
-import userRoutes from "./routes/user.route.js";
+import memberRoutes from "./routes/member.route.js";
 import bookRoutes from "./routes/book.route.js";
 import loanRoutes from "./routes/loan.route.js";
 
@@ -25,11 +25,11 @@ const __dirname = path.dirname(__filename);
 // Middleware
 app.use(cookieParser());
 app.use(express.json()); //allows us to accept JSON data in the req.body
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.join(__dirname, "..", "public")));
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/members", memberRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/loans", loanRoutes);
 

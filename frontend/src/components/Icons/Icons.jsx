@@ -1,5 +1,4 @@
 import { createIcon } from "@chakra-ui/icons";
-import React from "react";
 
 export const HomeIcon = createIcon({
   displayName: "HomeIcon",

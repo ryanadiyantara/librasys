@@ -3,10 +3,10 @@ import Loan from "../models/loan.model.js";
 
 // Controller to create a new loan
 export const createLoans = async (req, res) => {
-  const loan = req.body; // user will send this data
+  const loan = req.body; // member will send this data
 
   // Validate required fields
-  if (!loan.userId || !loan.bookId || !loan.borrowDate || !loan.dueDate) {
+  if (!loan.memberId || !loan.bookId || !loan.borrowDate || !loan.dueDate) {
     return res.status(400).json({ success: false, message: "Please provide all fields" });
   }
 
@@ -38,7 +38,7 @@ export const getLoans = async (req, res) => {
 // Controller to update a loan by ID
 export const updateLoans = async (req, res) => {
   const { id } = req.params;
-  const loan = req.body; // user will send this data
+  const loan = req.body; // member will send this data
 
   // Validate the loan ID
   if (!mongoose.Types.ObjectId.isValid(id)) {

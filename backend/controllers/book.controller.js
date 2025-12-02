@@ -29,7 +29,7 @@ export const createBooks = async (req, res) => {
       });
     }
 
-    const book = req.body; // user will send this data
+    const book = req.body; // member will send this data
 
     // Validate required fields
     if (!book.title || !book.stock || !book.available) {
@@ -88,7 +88,7 @@ export const updateBooks = async (req, res) => {
     }
 
     const { id } = req.params;
-    const book = req.body; // user will send this data
+    const book = req.body; // member will send this data
 
     // Validate the book ID
     if (!mongoose.Types.ObjectId.isValid(id)) {

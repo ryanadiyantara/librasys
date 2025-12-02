@@ -16,9 +16,9 @@ const verifyJWT = (req, res, next) => {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: "Forbidden" });
 
-    // Store the user ID in the request object
+    // Store the member ID in the request object
     // Not yet used in this project
-    req.pid = decoded.UserInfo.pid;
+    req.pid = decoded.MemberInfo.pid;
     next();
   });
 };

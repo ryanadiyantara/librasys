@@ -19,18 +19,18 @@ import Logo1 from "../assets/img/logo1.png";
 import Logo2 from "../assets/img/logo2.png";
 import logInImage from "../assets/img/logInImage.jpg";
 
-import { useUserStore } from "../store/user";
+import { useMemberStore } from "../store/member";
 
 const ForgotPassword = () => {
   // Utils
-  const { forgotPassword } = useUserStore();
+  const { forgotPassword } = useMemberStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
   const bgForm = useColorModeValue("white", "navy.800");
   const colorMode = useColorMode();
   const navigate = useNavigate();
-  const [newUser, setNewUser] = useState({
+  const [newMember, setNewMember] = useState({
     email: "",
   });
   const [errors, setErrors] = useState({});
@@ -38,12 +38,12 @@ const ForgotPassword = () => {
   // Services
   const handleResetLink = async () => {
     const currentErrors = {
-      email: !newUser.email,
+      email: !newMember.email,
     };
 
     setErrors(currentErrors);
 
-    const { success, message } = await forgotPassword(newUser);
+    const { success, message } = await forgotPassword(newMember);
 
     if (success) {
       toast({
@@ -52,7 +52,7 @@ const ForgotPassword = () => {
         status: "success",
         isClosable: true,
       });
-      setNewUser({
+      setNewMember({
         email: "",
       });
       setTimeout(() => {
@@ -125,8 +125,8 @@ const ForgotPassword = () => {
                   size="lg"
                   placeholder="Your email"
                   name="email"
-                  value={newUser.email}
-                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  value={newMember.email}
+                  onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
                   borderColor={errors.email ? "red.500" : "gray.200"}
                 />
                 <Button

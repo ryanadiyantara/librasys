@@ -3,26 +3,26 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import asyncHandler from "express-async-handler";
-import User from "../models/user.model.js";
+import Member from "../models/member.model.js";
 
-// Controller to handle user login
+// Controller to handle member login
 export const login = asyncHandler(async (req, res) => {
-  const { email, password } = req.body; // user will send this data
+  const { email, password } = req.body; // member will send this data
 
   // Validate required fields
   if (!email || !password) {
     return res.status(400).json({ success: false, message: "Please provide all fields" });
   }
 
-  // Check if user exists and if user is deactivated
-  const foundUser = await User.findOne({ email }).exec();
+  // Check if member exists and if member is deactivated
+  const foundMember = await Member.findOne({ email }).exec();
 
-  if (!foundUser || foundUser.na === true) {
+  if (!foundMember || foundMember.na === true) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
   }
 
   // Check if password is correct
-  const match = await bcrypt.compare(password, foundUser.password);
+  const match = await bcrypt.compare(password, foundMember.password);
 
   if (!match) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
@@ -31,16 +31,16 @@ export const login = asyncHandler(async (req, res) => {
   // Generate access token
   const accessToken = jwt.sign(
     {
-      // User info to be stored in token
-      UserInfo: {
-        pid: foundUser._id,
+      // Member info to be stored in token
+      MemberInfo: {
+        pid: foundMember._id,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "1h" }
   );
 
-  const refreshToken = jwt.sign({ email: foundUser.email }, process.env.REFRESH_TOKEN_SECRET, {
+  const refreshToken = jwt.sign({ email: foundMember.email }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "1h",
   });
 
@@ -54,7 +54,7 @@ export const login = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     accessToken: accessToken,
-    role: foundUser.role,
+    role: foundMember.role,
   });
 });
 
@@ -76,14 +76,14 @@ export const refresh = async (req, res) => {
         return res.status(403).json({ success: false, message: "Forbidden" });
       }
 
-      const foundUser = await User.findOne({ email: decoded.email }).exec();
+      const foundMember = await Member.findOne({ email: decoded.email }).exec();
 
-      if (!foundUser) return res.status(401).json({ message: "Unauthorized" });
+      if (!foundMember) return res.status(401).json({ message: "Unauthorized" });
 
       const accessToken = jwt.sign(
         {
-          UserInfo: {
-            email: foundUser.email,
+          MemberInfo: {
+            email: foundMember.email,
           },
         },
         process.env.ACCESS_TOKEN_SECRET,
@@ -95,7 +95,7 @@ export const refresh = async (req, res) => {
   );
 };
 
-// Controller to handle user logout
+// Controller to handle member logout
 export const logout = async (req, res) => {
   // To be updated
   // const cookies = req.cookies;
@@ -108,19 +108,19 @@ export const logout = async (req, res) => {
   });
 };
 
-// Controller to handle user forgot password
+// Controller to handle member forgot password
 export const forgotPassword = asyncHandler(async (req, res) => {
-  const { email } = req.body; // user will send this data
+  const { email } = req.body; // member will send this data
 
   // Validate required fields
   if (!email) {
     return res.status(400).json({ success: false, message: "Please provide email" });
   }
 
-  // Check if email user exists
-  const foundUser = await User.findOne({ email }).exec();
+  // Check if email member exists
+  const foundMember = await Member.findOne({ email }).exec();
 
-  if (!foundUser) {
+  if (!foundMember) {
     return res.status(400).json({ success: false, message: "Email not found" });
   }
 
@@ -129,11 +129,11 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
   // Set password reset fields in database
-  foundUser.passwordResetToken = hashedToken;
-  foundUser.passwordResetExpires = Date.now() + 3600000; // 1 hour
+  foundMember.passwordResetToken = hashedToken;
+  foundMember.passwordResetExpires = Date.now() + 3600000; // 1 hour
 
   // Save reset token and expiry in database
-  await foundUser.save();
+  await foundMember.save();
 
   // Create reset URL
   const resetURL = `${req.protocol}://${req.get(
@@ -144,7 +144,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      user: process.env.EMAIL_USERNAME,
+      member: process.env.EMAIL_USERNAME,
       pass: process.env.EMAIL_PASSWORD,
     },
   });
@@ -173,11 +173,11 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     // Rollback
-    foundUser.passwordResetToken = undefined;
-    foundUser.passwordResetExpires = undefined;
+    foundMember.passwordResetToken = undefined;
+    foundMember.passwordResetExpires = undefined;
 
     // Save rollback
-    await foundUser.save();
+    await foundMember.save();
 
     return res.status(500).json({
       success: false,
@@ -186,9 +186,9 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   }
 });
 
-// Controller to handle user reset password
+// Controller to handle member reset password
 export const resetPassword = asyncHandler(async (req, res) => {
-  const { token } = req.query; // user will send this data
+  const { token } = req.query; // member will send this data
 
   // Validate the token
   if (!token) {
@@ -198,14 +198,14 @@ export const resetPassword = asyncHandler(async (req, res) => {
   // Hash the token
   const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
-  // Find the user by the hashed token and check if the token is not expired
-  const user = await User.findOne({
+  // Find the member by the hashed token and check if the token is not expired
+  const member = await Member.findOne({
     passwordResetToken: hashedToken,
     passwordResetExpires: { $gt: Date.now() },
   }).exec();
 
-  // Check if user exists and token is valid
-  if (!user) {
+  // Check if member exists and token is valid
+  if (!member) {
     res.redirect("/login?message=Token is invalid");
     return;
   }
@@ -213,13 +213,13 @@ export const resetPassword = asyncHandler(async (req, res) => {
   // Hash the new password
   const hashedPwd = await bcrypt.hash("librasys123", 10);
 
-  // Update the user's password and clear the reset token and expiration
-  user.password = hashedPwd;
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
+  // Update the member's password and clear the reset token and expiration
+  member.password = hashedPwd;
+  member.passwordResetToken = undefined;
+  member.passwordResetExpires = undefined;
 
-  // Save the updated user
-  await user.save();
+  // Save the updated member
+  await member.save();
 
   // Redirect to login page
   res.redirect("/login?message=Password reset successfully");

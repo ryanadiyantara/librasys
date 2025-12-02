@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const loansSchema = new mongoose.Schema(
   {
-    userId: {
+    memberId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Member",
       required: true,
     },
     bookId: {

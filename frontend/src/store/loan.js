@@ -8,7 +8,7 @@ export const useLoanStore = create((set) => ({
 
   // Function to create a new loan
   createLoan: async (newLoan) => {
-    if (!newLoan.userId || !newLoan.bookId || !newLoan.borrowDate || !newLoan.dueDate) {
+    if (!newLoan.memberId || !newLoan.bookId || !newLoan.borrowDate || !newLoan.dueDate) {
       return { success: false, message: "Please fill in all fields." };
     }
 
@@ -56,7 +56,7 @@ export const useLoanStore = create((set) => ({
   // Function to update a loan by ID
   updateLoan: async (pid, updatedLoan) => {
     if (
-      !updatedLoan.userId ||
+      !updatedLoan.memberId ||
       !updatedLoan.bookId ||
       !updatedLoan.borrowDate ||
       !updatedLoan.dueDate

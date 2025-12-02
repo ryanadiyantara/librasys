@@ -23,11 +23,11 @@ import Logo1 from "../assets/img/logo1.png";
 import Logo2 from "../assets/img/logo2.png";
 import logInImage from "../assets/img/logInImage.jpg";
 
-import { useUserStore } from "../store/user";
+import { useMemberStore } from "../store/member";
 
 const Login = () => {
   // Utils
-  const { loginUser } = useUserStore();
+  const { loginMember } = useMemberStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
@@ -35,7 +35,7 @@ const Login = () => {
   const colorMode = useColorMode();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [newUser, setNewUser] = useState({
+  const [newMember, setNewMember] = useState({
     email: "",
     password: "",
   });
@@ -74,13 +74,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const currentErrors = {
-      email: !newUser.email,
-      password: !newUser.password,
+      email: !newMember.email,
+      password: !newMember.password,
     };
 
     setErrors(currentErrors);
 
-    const { success, message, role } = await loginUser(newUser);
+    const { success, message, role } = await loginMember(newMember);
 
     if (success) {
       toast({
@@ -89,7 +89,7 @@ const Login = () => {
         status: "success",
         isClosable: true,
       });
-      setNewUser({
+      setNewMember({
         email: "",
         password: "",
       });
@@ -165,8 +165,8 @@ const Login = () => {
                   size="lg"
                   placeholder="Your email"
                   name="email"
-                  value={newUser.email}
-                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  value={newMember.email}
+                  onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
                   borderColor={errors.email ? "red.500" : "gray.200"}
                 />
                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -181,8 +181,8 @@ const Login = () => {
                     size="lg"
                     placeholder="Your password"
                     name="password"
-                    value={newUser.password}
-                    onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                    value={newMember.password}
+                    onChange={(e) => setNewMember({ ...newMember, password: e.target.value })}
                     borderColor={errors.password ? "red.500" : "gray.200"}
                   />
                   <InputRightElement>
