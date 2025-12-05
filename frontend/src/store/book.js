@@ -17,7 +17,6 @@ export const useBookStore = create((set) => ({
     formData.append("author", newBook.author);
     formData.append("publisher", newBook.publisher);
     formData.append("year", newBook.year);
-    formData.append("isbn", newBook.isbn);
     formData.append("category", newBook.category);
     formData.append("stock", newBook.stock);
     formData.append("available", newBook.available);
@@ -65,22 +64,21 @@ export const useBookStore = create((set) => ({
   },
 
   // Function to update a book by ID
-  updateBook: async (pid, updateBook) => {
-    if (!updateBook.title || !updateBook.stock || !updateBook.available) {
+  updateBook: async (pid, updatedBook) => {
+    if (!updatedBook.title || !updatedBook.stock || !updatedBook.available) {
       return { success: false, message: "Please fill in all fields." };
     }
 
     const formData = new FormData();
-    formData.append("title", newBook.title);
-    formData.append("author", newBook.author);
-    formData.append("publisher", newBook.publisher);
-    formData.append("year", newBook.year);
-    formData.append("isbn", newBook.isbn);
-    formData.append("category", newBook.category);
-    formData.append("stock", newBook.stock);
-    formData.append("available", newBook.available);
-    formData.append("location", newBook.location);
-    formData.append("file", newBook.image);
+    formData.append("title", updatedBook.title);
+    formData.append("author", updatedBook.author);
+    formData.append("publisher", updatedBook.publisher);
+    formData.append("year", updatedBook.year);
+    formData.append("category", updatedBook.category);
+    formData.append("stock", updatedBook.stock);
+    formData.append("available", updatedBook.available);
+    formData.append("location", updatedBook.location);
+    formData.append("file", updatedBook.image);
 
     const res = await fetch(`/api/books/${pid}`, {
       method: "PUT",
@@ -107,18 +105,11 @@ export const useBookStore = create((set) => ({
 
   // Function to delete a book by ID
   deleteBook: async (pid) => {
-    const deletedBook = {
-      na: true,
-      del: true,
-    };
-
     const res = await fetch(`/api/books/${pid}`, {
-      method: "PUT",
+      method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(deletedBook),
     });
 
     if (res.status === 401 || res.status === 403) {

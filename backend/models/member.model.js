@@ -29,11 +29,12 @@ const membersSchema = new mongoose.Schema(
     profileImage: {
       type: String,
       required: false,
+      default: "-",
     },
     status: {
       type: Boolean,
       required: false,
-      default: false,
+      default: true,
     },
     passwordResetToken: {
       type: String,

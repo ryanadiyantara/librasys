@@ -9,7 +9,7 @@ import Counter from "../models/counter.js";
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/profileImage");
+    cb(null, "public/uploads/profileImage");
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -54,10 +54,6 @@ export const createMembers = async (req, res) => {
   if (existingIdentityNumber) {
     return res.status(400).json({ success: false, message: "Identity Number is already taken" });
   }
-
-  // Set default profile image path
-  const defaultImagePath = path.relative("public/profileImage", "public/profileImage/default.jpg");
-  member.profileImage = defaultImagePath;
 
   try {
     // Add next member ID

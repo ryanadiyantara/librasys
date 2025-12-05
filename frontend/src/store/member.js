@@ -167,14 +167,12 @@ export const useMemberStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
-  // Function to update delete status of a member by ID
-  deletedMember: async (pid) => {
-    const now = new Date();
-    const formattedDate = now.toISOString();
+  // Function to update status of a member by ID
+  setStatusMember: async (pid, currentStatus) => {
+    const newStatus = !currentStatus;
 
     const formData = new FormData();
-    formData.append("endDate", formattedDate);
-    formData.append("na", true);
+    formData.append("status", newStatus);
 
     const res = await fetch(`/api/members/${pid}`, {
       method: "PUT",
@@ -194,7 +192,7 @@ export const useMemberStore = create((set) => ({
 
     // update the ui immediately, without needing a refresh
     set((state) => ({
-      members: state.members.filter((member) => member._id !== pid),
+      members: state.members.map((member) => (member._id === pid ? data.data : member)),
     }));
     return { success: true, message: data.message };
   },

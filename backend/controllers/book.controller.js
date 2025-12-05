@@ -6,7 +6,7 @@ import Book from "../models/book.model.js";
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/book/image");
+    cb(null, "public/uploads/bookImage");
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -38,7 +38,7 @@ export const createBooks = async (req, res) => {
 
     // Check if any file is uploaded
     if (req.file) {
-      const filePath = path.relative("public/book", req.file.path);
+      const filePath = path.relative("public/uploads", req.file.path);
       book.image = filePath;
     }
 
@@ -97,7 +97,7 @@ export const updateBooks = async (req, res) => {
 
     // Check if a new file is uploaded
     if (req.file) {
-      const filePath = path.relative("public/book", req.file.path);
+      const filePath = path.relative("public/uploads", req.file.path);
       book.image = filePath;
     }
 

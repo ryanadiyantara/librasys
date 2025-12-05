@@ -19,8 +19,9 @@ import {
   Td,
   Image,
   Select,
+  Badge,
 } from "@chakra-ui/react";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaBan, FaCheck } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -32,7 +33,7 @@ import { useMemberStore } from "../store/member";
 
 const AdminMember = () => {
   // Utils
-  const { members, createMember, fetchMember, updateMember, deleteMember } = useMemberStore();
+  const { members, createMember, fetchMember, updateMember, setStatusMember } = useMemberStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
@@ -54,6 +55,7 @@ const AdminMember = () => {
   const [inputValue, setInputValue] = useState("");
   const [selectedMemberName, setSelectedMemberName] = useState(null);
   const [selectedMemberPid, setSelectedMemberPid] = useState(null);
+  const [selectedMemberStatus, setSelectedMemberStatus] = useState(null);
 
   const handleSearchChange = (member) => {
     setSearchQuery(member.target.value.toLowerCase());
@@ -83,9 +85,10 @@ const AdminMember = () => {
     setEditingMemberId(null);
   };
 
-  const openDeleteModal = (name, pid) => {
+  const openSetStatusModal = (name, pid, status) => {
     setSelectedMemberName(name);
     setSelectedMemberPid(pid);
+    setSelectedMemberStatus(status);
     setIsOpen(true);
   };
 
@@ -94,6 +97,7 @@ const AdminMember = () => {
     setInputValue("");
     setSelectedMemberName(null);
     setSelectedMemberPid(null);
+    setSelectedMemberStatus(null);
   };
 
   // Services
@@ -168,8 +172,9 @@ const AdminMember = () => {
     }
   };
 
-  const handleDeleteMember = async (pid) => {
+  const handleStatusMember = async (pid, currentStatus) => {
     if (!selectedMemberName) return;
+    const newStatus = !currentStatus;
 
     if (inputValue !== selectedMemberName) {
       toast({
@@ -182,12 +187,12 @@ const AdminMember = () => {
       return;
     }
 
-    const { success, message } = await deleteMember(pid);
+    const { success, message } = await setStatusMember(pid, currentStatus);
 
     if (success) {
       toast({
         title: "Success",
-        description: "Member deleted successfully",
+        description: newStatus ? "Member has been activated" : "Member has been deactivated",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -196,6 +201,7 @@ const AdminMember = () => {
       setInputValue("");
       setSelectedMemberName(null);
       setSelectedMemberPid(null);
+      setSelectedMemberStatus(null);
     } else {
       toast({
         title: "Error",
@@ -263,7 +269,7 @@ const AdminMember = () => {
                 />
               </Box>
             </Flex>
-            <Box>
+            <Box overflowX="auto">
               <Table variant="simple" color={textColor}>
                 <Thead>
                   <Tr my=".8rem" pl="0px" color="gray.400">
@@ -283,13 +289,15 @@ const AdminMember = () => {
                       Registered Date
                     </Th>
                     <Th borderColor={borderColor} color="gray.400">
+                      Status
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
                       Action
                     </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {members
-                    // .filter((member) => !member.na)
                     .filter((member) => {
                       const createdAt = new Date(member.createdAt);
 
@@ -301,13 +309,16 @@ const AdminMember = () => {
                         })
                         .toLowerCase();
 
+                      const statusText = member.status ? "active" : "inactive";
+
                       return (
-                        member.memberId.toLowerCase().includes(searchQuery) ||
                         member.name.toLowerCase().includes(searchQuery) ||
                         member.email.toLowerCase().includes(searchQuery) ||
+                        member.memberId.toLowerCase().includes(searchQuery) ||
                         member.identityNumber.toLowerCase().includes(searchQuery) ||
                         member.role.toLowerCase().includes(searchQuery) ||
-                        formattedRegisteredDate.includes(searchQuery.toLowerCase())
+                        formattedRegisteredDate.includes(searchQuery.toLowerCase()) ||
+                        statusText.includes(searchQuery.toLowerCase())
                       );
                     })
                     .map((member) => {
@@ -324,8 +335,8 @@ const AdminMember = () => {
                                   member.profileImage &&
                                   member.profileImage !== "-" &&
                                   member.profileImage.trim() !== ""
-                                    ? "/public/profileImage/" + member.profileImage
-                                    : "/public/profileImage/default.jpg"
+                                    ? "/public/uploads/" + member.profileImage
+                                    : "/public/uploads/profileImage/default.jpg"
                                 }
                                 alt={member.profileImage}
                                 boxSize="50px"
@@ -370,6 +381,17 @@ const AdminMember = () => {
                             </Text>
                           </Td>
                           <Td borderColor={borderColor}>
+                            <Badge
+                              colorScheme={member.status ? "green" : "red"}
+                              variant="solid"
+                              fontSize="0.75rem"
+                              fontWeight="bold"
+                              borderRadius="md"
+                            >
+                              {member.status ? "Active" : "Inactive"}
+                            </Badge>
+                          </Td>
+                          <Td borderColor={borderColor}>
                             <Flex direction="row" p="0px" alignItems="center" gap="4">
                               <Flex
                                 alignItems="center"
@@ -379,28 +401,39 @@ const AdminMember = () => {
                               >
                                 <FaPen size="14" color={iconColor} />
                                 <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                  EDIT
+                                  Edit
                                 </Text>
                               </Flex>
                               <Flex
                                 alignItems="center"
                                 gap="1"
                                 as="button"
-                                onClick={() => openDeleteModal(member.name, member._id)}
+                                onClick={() =>
+                                  openSetStatusModal(member.name, member._id, member.status)
+                                }
                               >
-                                <FaTrash size="14" color="#E53E3E" />
-                                <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
-                                  DELETE
+                                {member.status ? (
+                                  <FaBan size="14" color="#E53E3E" />
+                                ) : (
+                                  <FaCheck size="14" color="#38A169" />
+                                )}
+                                <Text
+                                  fontSize="14px"
+                                  color={member.status ? "#E53E3E" : "#38A169"}
+                                  fontWeight="bold"
+                                >
+                                  {member.status ? "Deactivate" : "Activate"}
                                 </Text>
                               </Flex>
-                              {/* Modal Delete */}
+                              {/* Modal Set Status */}
                               <CustomModal
                                 isOpen={isOpen}
                                 onClose={handleClose}
-                                title="Delete Member"
+                                title="Set Status Member"
                                 bodyContent={
                                   <p>
-                                    To delete a member named{" "}
+                                    To {selectedMemberStatus ? "deactivate" : "activate"} the member
+                                    named{" "}
                                     <span style={{ fontWeight: "bold" }}>{selectedMemberName}</span>
                                     , type the name to confirm.
                                   </p>
@@ -409,7 +442,9 @@ const AdminMember = () => {
                                 modalBackdropFilter="blur(1px)"
                                 inputValue={inputValue}
                                 onInputChange={(e) => setInputValue(e.target.value)}
-                                onConfirm={() => handleDeleteMember(selectedMemberPid)}
+                                onConfirm={() =>
+                                  handleStatusMember(selectedMemberPid, selectedMemberStatus)
+                                }
                               />
                             </Flex>
                           </Td>

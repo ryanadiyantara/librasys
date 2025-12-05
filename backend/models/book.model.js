@@ -21,11 +21,6 @@ const booksSchema = new mongoose.Schema(
       required: false,
       default: "-",
     },
-    isbn: {
-      type: String,
-      required: false,
-      default: "-",
-    },
     category: {
       type: String,
       required: false,
