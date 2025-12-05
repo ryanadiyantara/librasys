@@ -19,7 +19,7 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import { DocumentIcon, HomeIcon, PersonIcon, RocketIcon } from "./Icons/Icons";
+import { DocumentIcon, PersonIcon, RocketIcon } from "./Icons/Icons";
 import IconBox from "./Icons/IconBox";
 import { HSeparator } from "./Separator";
 
@@ -36,10 +36,9 @@ function Sidebar() {
     {
       name: "Admin",
       views: [
-        { path: "/admin/dashboard", name: "Dashboard", icon: <HomeIcon /> },
+        { path: "/admin/loan", name: "List of Loans", icon: <RocketIcon /> },
         { path: "/admin/member", name: "List of Members", icon: <PersonIcon /> },
         { path: "/admin/book", name: "List of Books", icon: <DocumentIcon /> },
-        { path: "/admin/loan", name: "List of Loans", icon: <RocketIcon /> },
       ],
     },
   ];
@@ -196,10 +195,9 @@ export function SidebarResponsive({}) {
     {
       name: "Admin",
       views: [
-        { path: "/admin/dashboard", name: "Dashboard", icon: <HomeIcon /> },
+        { path: "/admin/loan", name: "List of Loans", icon: <RocketIcon /> },
         { path: "/admin/member", name: "List of Members", icon: <PersonIcon /> },
         { path: "/admin/book", name: "List of Books", icon: <DocumentIcon /> },
-        { path: "/admin/loan", name: "List of Loans", icon: <RocketIcon /> },
       ],
     },
   ];

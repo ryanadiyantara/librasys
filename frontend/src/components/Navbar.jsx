@@ -31,10 +31,9 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const routes = [
-    { path: "/admin/dashboard", name: "Dashboard", category: "" },
+    { path: "/admin/loan", name: "List of Loans", category: "" },
     { path: "/admin/member", name: "List of Members", category: "" },
     { path: "/admin/book", name: "List of Books", category: "" },
-    { path: "/admin/loan", name: "List of Loans", category: "" },
 
     { path: "/dashboard", name: "Dashboard", category: "" },
     { path: "/profile", name: "Profile", category: "" },
@@ -139,16 +138,13 @@ function Navbar() {
         <Box mb={{ sm: "8px", md: "0px" }}>
           <Breadcrumb>
             <BreadcrumbItem color={"white"}>
-              <BreadcrumbLink
-                href={isAdminSession ? "/admin/dashboard" : "/dashboard"}
-                color={"white"}
-              >
+              <BreadcrumbLink href={isAdminSession ? "/admin/loan" : "/loan"} color={"white"}>
                 Pages
               </BreadcrumbLink>
             </BreadcrumbItem>
             {isAdminSession && (
               <BreadcrumbItem color={"white"}>
-                <BreadcrumbLink href="/admin/dashboard" color={"white"}>
+                <BreadcrumbLink href="/admin/loan" color={"white"}>
                   Admin
                 </BreadcrumbLink>
               </BreadcrumbItem>

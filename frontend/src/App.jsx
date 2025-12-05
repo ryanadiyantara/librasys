@@ -7,7 +7,6 @@ import Dashboard from "./pages/dashboard";
 import Loan from "./pages/loan";
 import Profile from "./pages/profile";
 import ChangePassword from "./pages/changepassword";
-import AdminDashboard from "./pages/admin.dashboard";
 import AdminMember from "./pages/admin.member";
 import AdminBook from "./pages/admin.book";
 import AdminLoan from "./pages/admin.loan";
@@ -27,10 +26,9 @@ function App() {
           <Route path="/loan" element={<Loan />} />
           <Route path="/changepassword" element={<ChangePassword />} />
 
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/loan" element={<AdminLoan />} />
           <Route path="/admin/member" element={<AdminMember />} />
           <Route path="/admin/book" element={<AdminBook />} />
-          <Route path="/admin/loan" element={<AdminLoan />} />
         </Routes>
       </Box>
     </>

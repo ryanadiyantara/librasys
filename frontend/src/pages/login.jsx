@@ -95,7 +95,7 @@ const Login = () => {
       });
       setTimeout(() => {
         if (role === "Admin") {
-          navigate("/admin/dashboard");
+          navigate("/admin/loan");
         } else {
           navigate("/dashboard");
         }
