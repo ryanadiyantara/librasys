@@ -47,7 +47,7 @@ const booksSchema = new mongoose.Schema(
     status: {
       type: Boolean,
       required: false,
-      default: false,
+      default: true,
     },
   },
   {

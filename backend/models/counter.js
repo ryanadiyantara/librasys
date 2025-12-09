@@ -6,7 +6,8 @@ const counterSchema = new mongoose.Schema(
     seq: { type: Number, required: true },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    name: { type: String, required: true },
+    seq: { type: Number, required: true },
   }
 );
 

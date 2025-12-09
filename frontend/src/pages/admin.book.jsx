@@ -435,7 +435,7 @@ const AdminBook = () => {
                               >
                                 <FaPen size="14" color={iconColor} />
                                 <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                  EDIT
+                                  Edit
                                 </Text>
                               </Flex>
                               <Flex
@@ -446,7 +446,7 @@ const AdminBook = () => {
                               >
                                 <FaTrash size="14" color="#E53E3E" />
                                 <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
-                                  DELETE
+                                  Delete
                                 </Text>
                               </Flex>
                               {/* Modal Delete */}

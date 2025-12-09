@@ -65,7 +65,13 @@ export const useBookStore = create((set) => ({
 
   // Function to update a book by ID
   updateBook: async (pid, updatedBook) => {
-    if (!updatedBook.title || !updatedBook.stock || !updatedBook.available) {
+    if (
+      !updatedBook.title ||
+      updatedBook.stock === undefined ||
+      updatedBook.stock === null ||
+      updatedBook.available === undefined ||
+      updatedBook.available === null
+    ) {
       return { success: false, message: "Please fill in all fields." };
     }
 

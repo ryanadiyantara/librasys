@@ -36,6 +36,11 @@ const membersSchema = new mongoose.Schema(
       required: false,
       default: true,
     },
+    onLoan: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     passwordResetToken: {
       type: String,
     },

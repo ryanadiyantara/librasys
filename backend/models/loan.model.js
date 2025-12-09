@@ -2,16 +2,22 @@ import mongoose from "mongoose";
 
 const loansSchema = new mongoose.Schema(
   {
+    loanId: {
+      type: String,
+      required: true,
+    },
     memberId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Member",
       required: true,
     },
-    bookId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Book",
-      required: true,
-    },
+    bookIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Book",
+        required: true,
+      },
+    ],
     borrowDate: {
       type: Date,
       required: true,
@@ -23,6 +29,7 @@ const loansSchema = new mongoose.Schema(
     returnDate: {
       type: Date,
       required: false,
+      default: null,
     },
     status: {
       type: Boolean,

@@ -388,7 +388,7 @@ const AdminMember = () => {
                               fontWeight="bold"
                               borderRadius="md"
                             >
-                              {member.status ? "Active" : "Inactive"}
+                              {member.status ? "ACTIVE" : "INACTIVE"}
                             </Badge>
                           </Td>
                           <Td borderColor={borderColor}>

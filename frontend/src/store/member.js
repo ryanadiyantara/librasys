@@ -167,6 +167,36 @@ export const useMemberStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
+  // Function to update onLoan status of a member by ID
+  updateOnLoan: async (pid, currentOnLoan) => {
+    const newOnLoan = !currentOnLoan;
+
+    const formData = new FormData();
+    formData.append("onLoan", newOnLoan);
+
+    const res = await fetch(`/api/members/${pid}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      window.location.href = `/login?message=Session Expired`;
+      return;
+    }
+
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    // update the ui immediately, without needing a refresh
+    set((state) => ({
+      members: state.members.map((member) => (member._id === pid ? data.data : member)),
+    }));
+    return { success: true, message: data.message };
+  },
+
   // Function to update status of a member by ID
   setStatusMember: async (pid, currentStatus) => {
     const newStatus = !currentStatus;
