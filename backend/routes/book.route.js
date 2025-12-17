@@ -4,11 +4,13 @@ import verifyJWT from "../middleware/verifyJWT.js";
 
 const router = express.Router();
 
+// Routes
+router.get("/", getBooks);
+
 // Verify JWT
 router.use(verifyJWT);
 
 // Routes
-router.get("/", getBooks);
 router.post("/", createBooks);
 router.put("/:id", updateBooks);
 router.delete("/:id", deleteBooks);

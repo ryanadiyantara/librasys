@@ -23,7 +23,7 @@ import { FaPen, FaTrash } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.admin";
 import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
@@ -354,7 +354,6 @@ const AdminBook = () => {
                 </Thead>
                 <Tbody>
                   {books
-                    // .filter((book) => !book.na)
                     .filter((book) => {
                       return (
                         book.title.toLowerCase().includes(searchQuery) ||

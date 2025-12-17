@@ -271,7 +271,7 @@ export const useMemberStore = create((set) => ({
     }
 
     localStorage.removeItem("accessToken");
-    set({ members: [] });
+    set({ currentMembers: null, members: [] });
     return { success: true, message: "Logout successfully" };
   },
 

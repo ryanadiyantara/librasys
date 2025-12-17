@@ -25,7 +25,7 @@ import { FaPen, FaBan, FaCheck } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.admin";
 import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 

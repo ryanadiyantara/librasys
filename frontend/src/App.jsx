@@ -16,7 +16,7 @@ function App() {
     <>
       <Box minH={"100vh"} bg={useColorModeValue("gray.100", "gray.900")}>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/login/forgotpassword" element={<ForgotPassword />} />

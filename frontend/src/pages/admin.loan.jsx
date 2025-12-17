@@ -26,7 +26,7 @@ import { FaCheckCircle, FaPen } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.admin";
 import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
@@ -405,14 +405,15 @@ const AdminLoan = () => {
                                 <Box
                                   key={book._id}
                                   p={2}
-                                  bg="gray.50"
+                                  bg="gray.200"
                                   borderRadius="md"
                                   boxShadow="sm"
-                                  border="1px solid #e2e8f0"
                                   fontSize="sm"
                                 >
-                                  <Text fontWeight="bold">{book.title}</Text>
-                                  <Text fontSize="xs" color="gray.600">
+                                  <Text fontWeight="bold" color="black">
+                                    {book.title}
+                                  </Text>
+                                  <Text fontSize="xs" color="gray.400">
                                     {book.author}
                                   </Text>
                                 </Box>
