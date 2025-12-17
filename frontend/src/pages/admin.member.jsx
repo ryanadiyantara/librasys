@@ -240,7 +240,7 @@ const AdminMember = () => {
           px={{ base: "30px", xl: "40px" }}
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          alignItems={{ base: "center", xl: "start" }}
+          alignItems={"start"}
           minHeight="85vh"
         >
           {/* Table Data */}

@@ -130,7 +130,7 @@ const Login = () => {
             alignItems="center"
             justifyContent="center"
             mb="60px"
-            direction={{ base: "row", lg: "row" }}
+            direction={{ base: "column", md: "row" }}
           >
             <Box zIndex="2" pt={"25px"} mb="12px" w={{ base: "400px" }}>
               <Stack direction="row" spacing="12px" align="center" justify="center">
