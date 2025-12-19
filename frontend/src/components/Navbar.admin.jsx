@@ -184,17 +184,6 @@ function Navbar() {
           gap="30px"
         >
           {isAdminSession && <SidebarResponsive />}
-
-          <Button
-            bg="blue.400"
-            fontSize="14px"
-            color="white"
-            fontWeight="bold"
-            h="45"
-            onClick={() => navigate("/dashboard")}
-          >
-            Go To Dashboard
-          </Button>
           <SettingsIcon
             cursor="pointer"
             color={"white"}
@@ -223,6 +212,17 @@ function Navbar() {
                     color={colorMode === "light" ? "Dark" : "Light"}
                   >
                     Toggle {colorMode === "light" ? "Dark" : "Light"}
+                  </Button>
+                </Flex>
+                <Flex justifyContent="space-between" alignItems="center" mb="24px">
+                  <Text fontSize="md" fontWeight="600" mb="4px">
+                    Dashboard
+                  </Text>
+                  <Button
+                    onClick={() => navigate("/dashboard")}
+                    color={colorMode === "light" ? "Dark" : "Light"}
+                  >
+                    Back to Dashboard
                   </Button>
                 </Flex>
                 <HSeparator />

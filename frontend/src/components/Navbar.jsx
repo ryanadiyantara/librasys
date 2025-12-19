@@ -14,7 +14,7 @@ import {
   useToast,
   Stack,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { SettingsIcon } from "./Icons/Icons";
 import { HSeparator } from "./Separator";
@@ -29,6 +29,8 @@ function Navbar() {
 
   const toast = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isDashboard = location.pathname === "/dashboard";
   const [isMemberLoaded, setIsMemberLoaded] = useState(false);
   const [isMemberSession, setIsMemberSession] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
@@ -164,15 +166,16 @@ function Navbar() {
                   <>
                     <Flex justifyContent="space-between" alignItems="center" mb="24px">
                       <Text fontSize="md" fontWeight="600" mb="4px">
-                        Profile
+                        {isDashboard ? "Profile" : "Dashboard"}
                       </Text>
                       <Button
-                        onClick={() => navigate("/profile")}
+                        onClick={() => navigate(isDashboard ? "/profile" : "/dashboard")}
                         color={colorMode === "light" ? "Dark" : "Light"}
                       >
-                        View Profile
+                        {isDashboard ? "View Profile" : "Back to Dashboard"}
                       </Button>
                     </Flex>
+
                     <HSeparator />
                     <Box mt="24px">
                       <Button

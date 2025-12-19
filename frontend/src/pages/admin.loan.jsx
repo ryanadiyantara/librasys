@@ -320,6 +320,9 @@ const AdminLoan = () => {
                       Due Date
                     </Th>
                     <Th borderColor={borderColor} color="gray.400">
+                      Return Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
                       Status
                     </Th>
                     <Th borderColor={borderColor} color="gray.400">
@@ -332,6 +335,7 @@ const AdminLoan = () => {
                     .filter((loan) => {
                       const borrowDate = new Date(loan.borrowDate);
                       const dueDate = new Date(loan.dueDate);
+                      const returnDate = new Date(loan.returnDate);
 
                       const formattedBorrowDate = borrowDate
                         .toLocaleDateString("en-GB", {
@@ -351,14 +355,32 @@ const AdminLoan = () => {
                         })
                         .toLowerCase();
 
+                      const formattedReturnDate = returnDate
+                        .toLocaleDateString("en-GB", {
+                          weekday: "long",
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
+
+                      const bookMatch = loan.bookIds.some(
+                        (book) =>
+                          book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          book.author.toLowerCase().includes(searchQuery.toLowerCase())
+                      );
+
                       return (
                         loan.loanId.toLowerCase().includes(searchQuery) ||
                         loan.memberId.name.toLowerCase().includes(searchQuery) ||
+                        loan.memberId.email.toLowerCase().includes(searchQuery) ||
+                        bookMatch ||
                         formattedBorrowDate.includes(searchQuery.toLowerCase()) ||
-                        formattedDueDate.includes(searchQuery.toLowerCase())
+                        formattedDueDate.includes(searchQuery.toLowerCase()) ||
+                        formattedReturnDate.includes(searchQuery.toLowerCase())
                       );
                     })
-                    // .sort((a, b) => new Date(a.borrowDate) - new Date(b.dueDate))
+                    .sort((a, b) => new Date(b.borrowDate) - new Date(a.borrowDate))
                     .map((loan) => {
                       const isReturned = loan.returnDate !== null;
                       const isOverdue = !isReturned && new Date() > new Date(loan.dueDate);
@@ -436,6 +458,17 @@ const AdminLoan = () => {
                                 month: "long",
                                 year: "numeric",
                               })}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {loan.returnDate
+                                ? new Date(loan.returnDate).toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                  })
+                                : "-"}
                             </Text>
                           </Td>
                           <Td borderColor={borderColor}>
