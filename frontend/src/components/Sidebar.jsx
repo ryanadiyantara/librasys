@@ -216,12 +216,7 @@ export function SidebarResponsive({}) {
   return (
     <>
       <Flex display={{ sm: "flex", xl: "none" }} alignItems="center" mr="10px">
-        <HamburgerIcon
-          color={useColorModeValue("black", "white")}
-          w="18px"
-          h="18px"
-          onClick={onOpen}
-        />
+        <HamburgerIcon color={"white"} w="18px" h="18px" onClick={onOpen} />
         <Drawer isOpen={isOpen} onClose={onClose} placement="left">
           <DrawerOverlay />
           <DrawerContent

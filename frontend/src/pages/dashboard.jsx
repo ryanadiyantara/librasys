@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   Box,
-  Button,
   Flex,
   Input,
   Image,
@@ -9,17 +8,11 @@ import {
   VStack,
   HStack,
   Text,
-  useColorModeValue,
-  useToast,
   AspectRatio,
-  Stack,
 } from "@chakra-ui/react";
-
-import { useNavigate, useSearchParams } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Logo1 from "../assets/img/logo1.png";
 import logInImage from "../assets/img/logInImage.jpg";
 
 import { useBookStore } from "../store/book";
@@ -28,13 +21,7 @@ const Dashboard = () => {
   // Utils
   const { books, fetchBook } = useBookStore();
 
-  const toast = useToast();
-  const textColor = useColorModeValue("gray.700", "white");
-  const bgForm = useColorModeValue("white", "navy.800");
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchParams] = useSearchParams();
-  const [errors, setErrors] = useState({});
 
   const handleSearchChange = (book) => {
     setSearchQuery(book.target.value.toLowerCase());
@@ -71,9 +58,7 @@ const Dashboard = () => {
 
           <Navbar />
 
-          {/* NAVBAR */}
-
-          {/* CONTENT */}
+          {/* Content */}
           <Box
             position="absolute"
             top="120px"

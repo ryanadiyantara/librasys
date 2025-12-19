@@ -34,11 +34,6 @@ function Navbar() {
     { path: "/admin/loan", name: "List of Loans", category: "" },
     { path: "/admin/member", name: "List of Members", category: "" },
     { path: "/admin/book", name: "List of Books", category: "" },
-
-    { path: "/dashboard", name: "Dashboard", category: "" },
-    { path: "/profile", name: "Profile", category: "" },
-    { path: "/loan", name: "Change Password", category: "" },
-    { path: "/changepassword", name: "Reservation", category: "" },
   ];
 
   const toast = useToast();

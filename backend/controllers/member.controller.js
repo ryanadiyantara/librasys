@@ -143,6 +143,33 @@ export const updateMembers = async (req, res) => {
       member.profilePicture = filePath;
     }
 
+    // Check if password needs to be updated
+    if (member.old_password && member.new_password) {
+      // Check if the member exists
+      const foundMember = await Member.findOne({ email: member.currentEmail }).exec();
+
+      if (!foundMember) {
+        return res.status(404).json({ success: false, message: "Member not found" });
+      }
+
+      // Compare the old password
+      const match = await bcrypt.compare(member.old_password, foundMember.password);
+
+      if (match) {
+        // Remove unnecessary fields
+        delete member.old_password;
+        delete member.currentEmail;
+
+        // Hash the new password
+        const hashedPwd = await bcrypt.hash(member.new_password, 10); // salt rounds
+        member.password = hashedPwd;
+        // Remove new password field
+        delete member.new_password;
+      } else {
+        return res.status(404).json({ success: false, message: "Wrong Old Password" });
+      }
+    }
+
     try {
       // Update the member by ID
       const updatedMember = await Member.findByIdAndUpdate(id, member, {
