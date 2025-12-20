@@ -166,13 +166,37 @@ function Navbar() {
                   <>
                     <Flex justifyContent="space-between" alignItems="center" mb="24px">
                       <Text fontSize="md" fontWeight="600" mb="4px">
-                        {isDashboard ? "Profile" : "Dashboard"}
+                        Dashboard
                       </Text>
                       <Button
-                        onClick={() => navigate(isDashboard ? "/profile" : "/dashboard")}
+                        onClick={() => navigate("/dashboard")}
                         color={colorMode === "light" ? "Dark" : "Light"}
                       >
-                        {isDashboard ? "View Profile" : "Back to Dashboard"}
+                        Dashboard
+                      </Button>
+                    </Flex>
+
+                    <Flex justifyContent="space-between" alignItems="center" mb="24px">
+                      <Text fontSize="md" fontWeight="600" mb="4px">
+                        Loan History
+                      </Text>
+                      <Button
+                        onClick={() => navigate("/loan")}
+                        color={colorMode === "light" ? "Dark" : "Light"}
+                      >
+                        Loan
+                      </Button>
+                    </Flex>
+
+                    <Flex justifyContent="space-between" alignItems="center" mb="24px">
+                      <Text fontSize="md" fontWeight="600" mb="4px">
+                        Change Password
+                      </Text>
+                      <Button
+                        onClick={() => navigate("/changepassword")}
+                        color={colorMode === "light" ? "Dark" : "Light"}
+                      >
+                        Change Password
                       </Button>
                     </Flex>
 

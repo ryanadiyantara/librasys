@@ -222,7 +222,7 @@ function Navbar() {
                     onClick={() => navigate("/dashboard")}
                     color={colorMode === "light" ? "Dark" : "Light"}
                   >
-                    Back to Dashboard
+                    Go to Dashboard
                   </Button>
                 </Flex>
                 <HSeparator />

@@ -5,7 +5,7 @@ import Login from "./pages/login";
 import ForgotPassword from "./pages/forgotpassword";
 import Dashboard from "./pages/dashboard";
 import Loan from "./pages/loan";
-import Profile from "./pages/profile";
+import ChangePassword from "./pages/changepassword";
 import AdminMember from "./pages/admin.member";
 import AdminBook from "./pages/admin.book";
 import AdminLoan from "./pages/admin.loan";
@@ -21,8 +21,8 @@ function App() {
           <Route path="/login/forgotpassword" element={<ForgotPassword />} />
 
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/loan" element={<Loan />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
 
           <Route path="/admin/loan" element={<AdminLoan />} />
           <Route path="/admin/member" element={<AdminMember />} />
