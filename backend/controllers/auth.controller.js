@@ -144,7 +144,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      member: process.env.EMAIL_USERNAME,
+      user: process.env.EMAIL_USERNAME,
       pass: process.env.EMAIL_PASSWORD,
     },
   });
